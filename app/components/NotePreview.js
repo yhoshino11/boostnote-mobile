@@ -8,10 +8,6 @@ import {
 import createMarkdownRenderer from 'rn-markdown'
 const Markdown = createMarkdownRenderer({ gfm: true, tables: true })
 import SyntaxHighlighter from 'react-native-syntax-highlighter'
-// Syntax highlight supported languages are listed here.
-// https://github.com/conorhastings/react-syntax-highlighter/blob/master/AVAILABLE_LANGUAGES.MD
-// Syntax highlight supported themes are listed here.
-// https://github.com/conorhastings/react-native-syntax-highlighter#styles-available
 import {
     agate,
     androidstudio,
@@ -222,8 +218,6 @@ const markdownStyle = {
     }
 }
 
-// TODO: needs better regex
-// test code at ../__tests__/NotePreview_module_test.js
 export const textToMarkdownAndCodeArray = (baseText) => {
     const codePattern = /(```)+(\S|\s)+?(```)/i
 
