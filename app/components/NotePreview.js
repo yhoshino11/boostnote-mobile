@@ -166,28 +166,20 @@ const theme = {
     'zenburn': zenburn
 }
 
-const defaultTheme = dracula
+const defaultTheme = theme['dracula']
 
 const styles = StyleSheet.create({
     flex: 1
 })
 
-const baseContainerStyle = {
+const itemContainerStyle = {
     flex: 1,
     paddingLeft:10,
     paddingTop:4,
     paddingBottom: 4,
     paddingRight:10,
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#f0f0f0'
 }
-
-const codeContainerStyle = Object.assign(baseContainerStyle, {
-    backgroundColor: '#f0f0f0'
-})
-
-const markdownContainerStyle = Object.assign(baseContainerStyle, {
-    backgroundColor: '#f0f0f0'
-})
 
 const markdownStyle = {
     container: {
@@ -274,11 +266,11 @@ class MarkdownPreview extends Component {
         const baseText = args['text']
 
         if(/^(```)+(\w|)+\n/i.test(baseText)) {
-            return (<View style={codeContainerStyle}>
+            return (<View style={itemContainerStyle}>
                         {this.codeComponent({text: baseText, theme: theme[this.props.theme]})}
                     </View>)
         } else {
-            return (<View style={markdownContainerStyle}>
+            return (<View style={itemContainerStyle}>
                         {this.markdownComponent({text: baseText, style: markdownStyle, containerStyle: {}})}
                     </View>)
         }
