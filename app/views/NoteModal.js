@@ -32,7 +32,7 @@ import createMarkdownRenderer from 'rn-markdown'
 const Markdown = createMarkdownRenderer({ gfm: true, tables: true })
 
 import MultilineTextInput from '../components/MultilineTextInput'
-import NotePreview from '../components/NotePreview';
+import NotePreview from '../components/NotePreview'
 
 const styles = {
    switchButton: {

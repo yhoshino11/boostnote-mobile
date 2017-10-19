@@ -4,10 +4,10 @@ import {
     Text,
     StyleSheet,
     FlatList
-} from 'react-native';
+} from 'react-native'
 import createMarkdownRenderer from 'rn-markdown'
 const Markdown = createMarkdownRenderer({ gfm: true, tables: true })
-import SyntaxHighlighter from 'react-native-syntax-highlighter';
+import SyntaxHighlighter from 'react-native-syntax-highlighter'
 // Syntax highlight supported languages are listed here.
 // https://github.com/conorhastings/react-syntax-highlighter/blob/master/AVAILABLE_LANGUAGES.MD
 // Syntax highlight supported themes are listed here.
@@ -89,7 +89,7 @@ import {
     xcode,
     xt256,
     zenburn
-} from 'react-syntax-highlighter/dist/styles';
+} from 'react-syntax-highlighter/dist/styles'
 
 const theme = {
     'agate': agate,
@@ -170,11 +170,11 @@ const theme = {
     'zenburn': zenburn
 }
 
-const defaultTheme = dracula;
+const defaultTheme = dracula
 
 const styles = StyleSheet.create({
     flex: 1
-});
+})
 
 const baseContainerStyle = {
     flex: 1,
@@ -187,11 +187,11 @@ const baseContainerStyle = {
 
 const codeContainerStyle = Object.assign(baseContainerStyle, {
     backgroundColor: '#f0f0f0'
-});
+})
 
 const markdownContainerStyle = Object.assign(baseContainerStyle, {
     backgroundColor: '#f0f0f0'
-});
+})
 
 const markdownStyle = {
     container: {
@@ -225,101 +225,101 @@ const markdownStyle = {
 // TODO: needs better regex
 // test code at ../__tests__/NotePreview_module_test.js
 export const textToMarkdownAndCodeArray = (baseText) => {
-    const codePattern = /(```)+(\S|\s)+?(```)/i;
+    const codePattern = /(```)+(\S|\s)+?(```)/i
+
     if (codePattern.test(baseText)) {
-        const mdBlock   = baseText.split(codePattern)[0];
-        const codeBlock = baseText.match(codePattern)[0];
-        const newText   = baseText.replace(mdBlock,'').replace(codeBlock,'');
-        const nextArray = [];
-        if (mdBlock != "")   { nextArray.push(mdBlock); }
-        if (codeBlock != "") { nextArray.push(codeBlock); }
-        if (newText != "")   { nextArray.push(textToMarkdownAndCodeArray(newText)); }
-        return [].concat.apply([],nextArray);
+        const mdBlock   = baseText.split(codePattern)[0]
+        const codeBlock = baseText.match(codePattern)[0]
+        const newText   = baseText.replace(mdBlock,'').replace(codeBlock,'')
+        const nextArray = []
+
+        if (mdBlock != '')   { nextArray.push(mdBlock) }
+        if (codeBlock != '') { nextArray.push(codeBlock) }
+        if (newText != '')   { nextArray.push(textToMarkdownAndCodeArray(newText)) }
+
+        return [].concat.apply([],nextArray)
     } else {
-        return [].concat.apply([],[baseText]);
+        return [].concat.apply([],[baseText])
     }
 }
 
 class MarkdownPreview extends Component {
 
-    _codeComponent = (args) => {
+    codeComponent = (args) => {
         if (typeof args['text'] !== 'string') { return }
-        const baseText = args['text'];
-        const theme    = args['theme'] || defaultTheme;
-        const codePrefix    = /^(```)+(\w|)+\n/i.exec(baseText)[0];
-        const code          = baseText.replace(codePrefix,'').replace(/\n+(```)$/i,'');
-        const lang          = codePrefix.replace(/^```/,'');
-        const highLightlang = /^(\s)$/.test(lang) ? 'bash' : lang;
+
+        const baseText = args['text']
+        const theme    = args['theme'] || defaultTheme
+        const codePrefix    = /^(```)+(\w|)+\n/i.exec(baseText)[0]
+        const code          = baseText.replace(codePrefix,'').replace(/\n+(```)$/i,'')
+        const lang          = codePrefix.replace(/^```/,'')
+        const highLightlang = /^(\s)$/.test(lang) ? 'bash' : lang
+
         return (<SyntaxHighlighter
                     language={highLightlang}
                     style={theme}
                     fontSize={this.props.syntaxFontSize}
-                    fontFamily={this.props.syntaxFontFamily}>{code}</SyntaxHighlighter>);
+                    fontFamily={this.props.syntaxFontFamily}>{code}</SyntaxHighlighter>)
     }
 
-    _markdownComponent = (args) => {
+    markdownComponent = (args) => {
         if (typeof args['text'] !== 'string') { return }
-        const baseText       = args['text'];
-        const markdownStyle  = args['style'] || {};
-        const containerStyle = args['containerStyle'] || {};
+
+        const baseText       = args['text']
+        const markdownStyle  = args['style'] || {}
+        const containerStyle = args['containerStyle'] || {}
+
         return (<Markdown
                     contentContainerStyle={containerStyle}
-                    markdownStyles={markdownStyle}>{baseText}</Markdown>);
+                    markdownStyles={markdownStyle}>{baseText}</Markdown>)
     }
 
-    _textToItem = (args) => {
-        if (typeof args['text'] != 'string' || args['text'] == '') return;
-        const baseText = args['text'];
+    textToItem = (args) => {
+        if (typeof args['text'] != 'string' || args['text'] == '') { return }
+
+        const baseText = args['text']
+
         if(/^(```)+(\w|)+\n/i.test(baseText)) {
             return (<View style={codeContainerStyle}>
-                        {this._codeComponent({text: baseText, theme: theme[this.props.theme]})}
-                    </View>);
+                        {this.codeComponent({text: baseText, theme: theme[this.props.theme]})}
+                    </View>)
         } else {
             return (<View style={markdownContainerStyle}>
-                        {this._markdownComponent({text: baseText, style: markdownStyle, containerStyle: {}})}
-                    </View>);
+                        {this.markdownComponent({text: baseText, style: markdownStyle, containerStyle: {}})}
+                    </View>)
         }
     }
 
-    _notePreviewAsFlatListData = (args) =>{
+    notePreviewAsFlatListData = (args) => {
         // Add markdown comment block at beginning of FlatList's data array,
         // so that it renders faster if original note starts with code block.
-        const text = "[//]: #\n" + args['fullText'] + "\n[//]: #";
-        const markdownAndCodeArray = textToMarkdownAndCodeArray(text);
+        const text = '[//]: #\n' + args['fullText'] + '\n[//]: #'
+        const markdownAndCodeArray = textToMarkdownAndCodeArray(text)
         const markdownAndCodeComponentArray = markdownAndCodeArray.map((baseText, index) => {
-            return {key: index, component: this._textToItem({text: baseText})}
-        });
-        return markdownAndCodeComponentArray;
+            return {key: index, component: this.textToItem({text: baseText})}
+        })
+
+        return markdownAndCodeComponentArray
     }
 
     render() {
         return (<View style={styles}>
                     <FlatList
-                        data={this._notePreviewAsFlatListData({fullText: this.props.text})}
+                        data={this.notePreviewAsFlatListData({fullText: this.props.text})}
                         renderItem={({item}) => { return item.component }}
                         initialNumToRender={0}
                         {...this.props} />
-                </View>);
+                </View>)
     }
 }
 
 export default class NotePreview extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            text: '',
-            theme: '',
-            syntaxFontSize: 16,
-            syntaxFontFamily: ''
-        }
-    }
-
     render () {
-      return (<MarkdownPreview
-                  theme={this.props.theme}
-                  syntaxFontSize={this.props.syntaxFontSize}
-                  syntaxFontFamily={this.props.syntaxFontFamily}
-                  text={this.props.text} />);
+        return (<MarkdownPreview
+                    theme={this.props.theme}
+                    syntaxFontSize={this.props.syntaxFontSize}
+                    syntaxFontFamily={this.props.syntaxFontFamily}
+                    text={this.props.text} />)
     }
 }
