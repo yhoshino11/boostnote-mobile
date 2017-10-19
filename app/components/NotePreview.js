@@ -245,7 +245,7 @@ export const textToMarkdownAndCodeArray = (baseText) => {
 
 class MarkdownPreview extends Component {
 
-    codeComponent = (args) => {
+    codeComponent(args) {
         if (typeof args['text'] !== 'string') { return }
 
         const baseText = args['text']
@@ -262,7 +262,7 @@ class MarkdownPreview extends Component {
                     fontFamily={this.props.syntaxFontFamily}>{code}</SyntaxHighlighter>)
     }
 
-    markdownComponent = (args) => {
+    markdownComponent(args) {
         if (typeof args['text'] !== 'string') { return }
 
         const baseText       = args['text']
@@ -274,7 +274,7 @@ class MarkdownPreview extends Component {
                     markdownStyles={markdownStyle}>{baseText}</Markdown>)
     }
 
-    textToItem = (args) => {
+    textToItem(args) {
         if (typeof args['text'] != 'string' || args['text'] == '') { return }
 
         const baseText = args['text']
@@ -290,7 +290,7 @@ class MarkdownPreview extends Component {
         }
     }
 
-    notePreviewAsFlatListData = (args) => {
+    notePreviewAsFlatListData(args) {
         // Add markdown comment block at beginning of FlatList's data array,
         // so that it renders faster if original note starts with code block.
         const text = '[//]: #\n' + args['fullText'] + '\n[//]: #'
