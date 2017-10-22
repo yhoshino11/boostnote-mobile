@@ -32,6 +32,7 @@ import createMarkdownRenderer from 'rn-markdown'
 const Markdown = createMarkdownRenderer({ gfm: true, tables: true })
 
 import MultilineTextInput from '../components/MultilineTextInput'
+import NotePreview from '../components/NotePreview'
 
 const styles = {
    switchButton: {
@@ -265,9 +266,15 @@ export default class NoteModal extends React.Component {
                 </View>
         } else {
             return <View style={{margin: 15}}>
-            <Markdown contentContainerStyle={styles.container} markdownStyles={markdownStyles}>
+            {/* <Markdown contentContainerStyle={styles.container} markdownStyles={markdownStyles}>
                 {this.state.text}
-            </Markdown>
+            </Markdown> */}
+            <NotePreview
+                style={styles.container}
+                theme={"github"}
+                syntaxFontSize={14}
+                syntaxFontFamily={Platform.OS === 'ios' ? 'Menlo-Regular' : 'monospace'}
+                text={this.state.text} />
             </View>
         }
     }
